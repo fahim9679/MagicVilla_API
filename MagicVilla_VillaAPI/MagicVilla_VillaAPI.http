@@ -4,3 +4,5 @@ GET {{MagicVilla_VillaAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{MagicVilla_VillaAPI_HostAddress}}/VillaAPI/GetAll
+Accept: application/json
