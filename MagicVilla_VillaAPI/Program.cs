@@ -1,13 +1,27 @@
+//using Serilog;
+
+using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Logging;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection")));
 // Add services to the container.
-
-builder.Services.AddControllers(options =>
-    options.ReturnHttpNotAcceptable = true
+//Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Debug()
+//    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
+//    .Enrich.FromLogContext()
+//    .WriteTo.Console()
+//    .WriteTo.File("logs/villaapi.txt", rollingInterval: RollingInterval.Day)
+//    .CreateLogger();
+//builder.Host.UseSerilog(Log.Logger);
+builder.Services.AddControllers(//options =>   options.ReturnHttpNotAcceptable = true
 ).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 //builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<ILogging, Logging>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
