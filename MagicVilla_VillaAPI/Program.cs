@@ -1,5 +1,6 @@
 //using Serilog;
 
+using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    .WriteTo.File("logs/villaapi.txt", rollingInterval: RollingInterval.Day)
 //    .CreateLogger();
 //builder.Host.UseSerilog(Log.Logger);
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddControllers(//options =>   options.ReturnHttpNotAcceptable = true
 ).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
