@@ -32,7 +32,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-                IEnumerable<VillaNumber> villaNumberList = await _dbVillaNumber.GetAllAsync();
+                IEnumerable<VillaNumber> villaNumberList = await _dbVillaNumber.GetAllAsync(includeProperties: "Villa");
                 _response.Result = _mapper.Map<List<VillaNumberDTO>>(villaNumberList);
                 _response.StatusCode = System.Net.HttpStatusCode.OK;
                 return Ok(_response);
@@ -58,7 +58,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var villaNumber = await _dbVillaNumber.GetAsync(x => x.VillaNo == id);
+                var villaNumber = await _dbVillaNumber.GetAsync(x => x.VillaNo == id, includeProperties: "Villa");
                 if (villaNumber == null)
                 {
                     _response.StatusCode = System.Net.HttpStatusCode.NotFound;
@@ -87,12 +87,12 @@ namespace MagicVilla_VillaAPI.Controllers
                
                 if (await _dbVillaNumber.GetAsync(x => x.VillaNo == createDTO.VillaNo) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Number already exists!");
+                    ModelState.AddModelError("ErrorMessage", "Villa Number already exists!");
                     return BadRequest(ModelState);
                 }
                 if (await _villaRepository.GetAsync(x => x.Id == createDTO.VillaId) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Id is Invalid!");
+                    ModelState.AddModelError("ErrorMessage", "Villa Id is Invalid!");
                     return BadRequest(ModelState);
                 }
                 if (createDTO == null)
@@ -159,7 +159,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 }
                 if (await _villaRepository.GetAsync(x => x.Id == updateDTO.VillaId) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Id is Invalid!");
+                    ModelState.AddModelError("ErrorMessage", "Villa Id is Invalid!");
                     return BadRequest(ModelState);
                 }
                 var villaNumber = await _dbVillaNumber.GetAsync(x => x.VillaNo == id,tracked:false);
